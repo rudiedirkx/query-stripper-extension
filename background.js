@@ -1,5 +1,8 @@
 
-var filter = {urls: ["<all_urls>"]};
+var filter = {
+	urls: ["<all_urls>"],
+	types: ["main_frame"],
+};
 var extraInfoSpec = ['blocking'];
 
 chrome.webRequest.onBeforeRequest.addListener(function(details) {
