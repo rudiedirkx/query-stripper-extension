@@ -1,0 +1,27 @@
+{
+	"name": "Query stripper",
+	"version": "1.4",
+	"manifest_version": 2,
+
+	"description": "Strips annoying query parameters from URLs. It does utm_* (google) and ref_ (imdb) now.",
+	"icons": {
+		"128": "logo_128.png",
+		"48": "logo_48.png"
+	},
+
+	"permissions": [
+		"webRequest",
+		"webRequestBlocking",
+		"*://*/*"
+	],
+	"background": {
+		"scripts": [ "logic.js", "background.js" ]
+	},
+
+	"content_scripts": [{
+		"all_frames": true,
+		"run_at": "document_start",
+		"js": [ "logic.js", "content.js" ],
+		"matches": [ "http://*/*", "https://*/*" ]
+	}]
+}
