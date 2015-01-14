@@ -17,7 +17,7 @@ function stripQuery(url) {
 	var q = url.split('?')[1];
 	if ( q ) {
 		q = '?' + q;
-		var regex = new RegExp('([\?\&](' + remove.join('|') + ')=[^&#]+)', 'ig');
+		var regex = new RegExp('([\?\&](' + remove.join('|') + ')=[^&#]*)', 'ig');
 		var params = [];
 		var filtered = q.replace(regex, '').replace(/^&/, '?');
 		if ( filtered != q ) {
