@@ -1,6 +1,6 @@
 {
 	"name": "Query stripper",
-	"version": "1.4",
+	"version": "1.5",
 	"manifest_version": 2,
 
 	"description": "Strips annoying query parameters from URLs. It does utm_* (google) and ref_ (imdb) now.",
