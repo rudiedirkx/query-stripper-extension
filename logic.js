@@ -1,6 +1,12 @@
 
 function stripQuery(url) {
 	var remove = [
+		// Atlassian
+		'atl_medium',
+		'atl_camp',
+		'atl_camptype',
+		'atl_source',
+
 		// Google
 		'utm_source',
 		'utm_medium',

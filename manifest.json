@@ -3,7 +3,7 @@
 	"version": "1.5",
 	"manifest_version": 2,
 
-	"description": "Strips annoying query parameters from URLs. It does utm_* (google) and ref_ (imdb) now.",
+	"description": "Strips annoying query parameters from URLs. It does utm_* (google), atl_* (atlassian) and ref_ (imdb) now.",
 	"icons": {
 		"128": "logo_128.png",
 		"48": "logo_48.png"
