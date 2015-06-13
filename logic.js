@@ -26,36 +26,15 @@ function stripQuery(url) {
 		'xtrck',
 	];
 
-	// Generic default case where we actually have a '?' for parameters in the URL
-	var q = url.split('?')[1];
-	if ( q ) {
-		q = '?' + q;
+	if (url.indexOf('?') > 0 || url.indexOf('#') > 0) {
+		var q = url;
 		var regex = new RegExp('([\?\&\#](' + remove.join('|') + ')=[^&#]*)', 'ig');
 		var params = [];
-		var filtered = q.replace(regex, '').replace(/^&/, '?');
+		var filtered = q.replace(regex, '').replace(/(?:\?|\&)/, '?');
 		if ( filtered != q ) {
-			var nUrl = url.replace(/\?.+/, function(m) {
-				return filtered;
-			});
-			return nUrl;
+			return filtered;
+		} else {
+			return q;
 		}
-	} else {
-
-		// But some sites are sneaky and avoid the above by using anchors (e.g. #xtor=XXX')
-		// An example is the french news site leparisien.fr which uses this in its
-		// Facebook & Twitter links.
-		var r = url.split('#')[1];
-		if ( r ) {
-			r = '#' + r;
-			var regex = new RegExp('([\?\&\#](' + remove.join('|') + ')=[^&#]*)', 'ig');
-			var params = [];
-			var filtered = r.replace(regex, '');
-			if ( filtered != r ) {
-				var nUrl = url.replace(/\#.+/, function(m) {
-					return filtered;
-				});
-				return nUrl;
-			}
-		}
-	}
+	} 
 }
