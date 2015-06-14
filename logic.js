@@ -1,4 +1,3 @@
-
 function stripQuery(url) {
 	var remove = [
 		// Atlassian
@@ -18,19 +17,23 @@ function stripQuery(url) {
 
 		// Imdb
 		'ref_',
+
+		// Others
+		'aff_',
+		'mtrck',
+		'xtor',
+		'xtref',
+		'xtrck',
 	];
 
-	var q = url.split('?')[1];
-	if ( q ) {
-		q = '?' + q;
-		var regex = new RegExp('([\?\&](' + remove.join('|') + ')=[^&#]*)', 'ig');
-		var params = [];
-		var filtered = q.replace(regex, '').replace(/^&/, '?');
-		if ( filtered != q ) {
-			var nUrl = url.replace(/\?.+/, function(m) {
-				return filtered;
-			});
-			return nUrl;
+	if (url.indexOf('?') > 0 || url.indexOf('#') > 0) {
+		var regex = new RegExp('([?&#])(?:' + remove.join('|') + ')=[^&#]*', 'ig');
+		var filtered = url;
+		filtered = filtered.replace(regex, '$1'); // Remove `name=value`
+		if ( filtered != url ) {
+			filtered = filtered.replace(/([?&#])[?&#]+/g, '$1'); // Replace double ?&# by first occurring
+			filtered = filtered.replace(/[?&#]+$/, ''); // Remove trailing ?&#
+			return filtered;
 		}
 	}
 }
