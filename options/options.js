@@ -16,11 +16,9 @@ qs.ui = {
 		this.rows++;
 	},
 
-	elToTokens: function() {
-		var $taTokens = document.querySelector('#ta-tokens');
-
+	strToTokens: function(str) {
 		var tokens = [];
-		$taTokens.value.split("\n").forEach(function(token) {
+		str.split("\n").forEach(function(token) {
 			if ((token = token.trim()).length) {
 				tokens.push(token);
 			}
@@ -28,8 +26,13 @@ qs.ui = {
 		return tokens;
 	},
 
+	elToTokens: function() {
+		var $taTokens = document.getElementById('ta-tokens');
+		return qs.ui.strToTokens($taTokens.value);
+	},
+
 	tokensToEl: function(callback) {
-		var $taTokens = document.querySelector('#ta-tokens');
+		var $taTokens = document.getElementById('ta-tokens');
 
 		qs.getTokens(function(tokens) {
 			$taTokens.value = $taTokens.defaultValue = tokens.join("\n");
@@ -40,8 +43,11 @@ qs.ui = {
 	},
 
 	attachListeners: function() {
-		var $formTokens = document.querySelector('#form-tokens');
-		var $taTokens = document.querySelector('#ta-tokens');
+		var $formTokens = document.getElementById('form-tokens');
+		var $taTokens = document.getElementById('ta-tokens');
+		var $formTest = document.getElementById('form-test');
+		var $inpTestUrl = document.getElementById('inp-test-url');
+		var $msgTestResult = document.getElementById('msg-test-result');
 
 		// Save tokens
 		$formTokens.addEventListener('submit', function(e) {
@@ -88,7 +94,31 @@ qs.ui = {
 		});
 
 		// Test URL
-		// @todo
+		$formTest.addEventListener('submit', function(e) {
+			e.preventDefault();
+
+			function result(msg) {
+				$formTest.classList.add('result');
+				$msgTestResult.innerHTML = msg;
+
+				setTimeout(function() {
+					$formTest.classList.remove('result');
+				}, 1000);
+			}
+
+			var tokens = qs.ui.strToTokens($taTokens.value);
+			if ( !tokens.length ) {
+				return result('No tokens, no filtering');
+			}
+
+			var url = $inpTestUrl.value.trim();
+			var nUrl = qs.stripQuery(tokens, url);
+			if ( !nUrl ) {
+				return result('Okay. Nothing in this URL was filtered out.');
+			}
+
+			return result('MATCH. Params were filtered. New URL: <code>' + nUrl + '</code>');
+		});
 	}
 };
 

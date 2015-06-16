@@ -15,3 +15,13 @@ textarea {
 #form-tokens:not(.saved) .saved {
 	display: none;
 }
+
+#form-test #msg-test-result {
+	color: #bbb;
+}
+#form-test.result #msg-test-result {
+	color: black;
+}
+#form-test:not(.result) #msg-test-result {
+	transition: color 1000ms linear;
+}

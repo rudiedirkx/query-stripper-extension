@@ -10,10 +10,26 @@
 <body>
 
 <form id="form-tokens">
-	<p>Tokens to strip, one per line:<br /><textarea id="ta-tokens" rows="18"></textarea></p>
+	<p>
+		Tokens to strip, one per line (remove all to reset):<br />
+		<textarea id="ta-tokens" rows="18"></textarea>
+	</p>
+
 	<p>
 		<button>Save</button>
 		<span class="saved">Saved!</span>
+	</p>
+</form>
+
+<br />
+
+<form id="form-test">
+	<p>Test a URL with the above config (unsaved works) for illegal tokens.</p>
+	<p>URL: <input type="url" id="inp-test-url" size="80" required /></p>
+
+	<p>
+		<button>Test</button>
+		<span id="msg-test-result"></span>
 	</p>
 </form>
 
