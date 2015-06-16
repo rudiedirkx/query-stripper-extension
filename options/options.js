@@ -1,19 +1,41 @@
 qs.ui = {
 	init: function() {
 		console.time('Options init');
-		qs.ui.loadTokens(function() {
+		qs.ui.tokensToEl(function() {
 			qs.ui.attachListeners();
 			console.timeEnd('Options init');
 		});
 	},
 
-	loadTokens: function(callback) {
+	fixRows: function() {
+		var min = 5;
+		this.rows = min;
+		while ( this.clientHeight < this.scrollHeight ) {
+			this.rows++;
+		}
+		this.rows++;
+	},
+
+	elToTokens: function() {
+		var $taTokens = document.querySelector('#ta-tokens');
+
+		var tokens = [];
+		$taTokens.value.split("\n").forEach(function(token) {
+			if ((token = token.trim()).length) {
+				tokens.push(token);
+			}
+		});
+		return tokens;
+	},
+
+	tokensToEl: function(callback) {
 		var $taTokens = document.querySelector('#ta-tokens');
 
 		qs.getTokens(function(tokens) {
-			$taTokens.value = tokens.join("\n");
+			$taTokens.value = $taTokens.defaultValue = tokens.join("\n");
+			qs.ui.fixRows.call($taTokens);
 
-			callback();
+			callback && callback();
 		});
 	},
 
@@ -21,34 +43,17 @@ qs.ui = {
 		var $formTokens = document.querySelector('#form-tokens');
 		var $taTokens = document.querySelector('#ta-tokens');
 
-		function fixRows(e) {
-			var min = 5;
-			this.rows = min;
-			while ( this.clientHeight < this.scrollHeight ) {
-				this.rows++;
-			}
-			this.rows++;
-		}
-
 		// Save tokens
 		$formTokens.addEventListener('submit', function(e) {
 			e.preventDefault();
 
-			var tokens = [];
-			$taTokens.value.split("\n").forEach(function(token) {
-				if ((token = token.trim()).length) {
-					tokens.push(token);
-				}
-			});
+			var tokens = qs.ui.elToTokens($taTokens);
 
 			function next() {
 				$formTokens.classList.add('saved');
 
 				// Update textarea with current tokens
-				qs.getTokens(function(tokens) {
-					$taTokens.value = tokens.join("\n");
-					fixRows.call($taTokens);
-				});
+				qs.ui.tokensToEl();
 
 				// Trigger bg script reload
 				chrome.runtime.sendMessage({RELOAD: true}, function(response) {
@@ -72,8 +77,15 @@ qs.ui = {
 		});
 
 		// Tokens textarea size
-		$taTokens.addEventListener('keyup', fixRows);
-		fixRows.call($taTokens);
+		$taTokens.addEventListener('keyup', function(e) {
+			if (this.lastValue === undefined) {
+				this.lastValue = this.defaultValue;
+			}
+
+			if (this.value != this.lastValue) {
+				qs.ui.fixRows.call(this);
+			}
+		});
 
 		// Test URL
 		// @todo
