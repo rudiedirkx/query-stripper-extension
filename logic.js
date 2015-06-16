@@ -1,5 +1,5 @@
-function stripQuery(url) {
-	var remove = [
+function getTokens(callback) {
+	var tokens = [
 		// Atlassian
 		'atl_medium',
 		'atl_camp',
@@ -25,9 +25,12 @@ function stripQuery(url) {
 		'xtref',
 		'xtrck',
 	];
+	setTimeout(callback, 1, tokens);
+}
 
+function stripQuery(tokens, url) {
 	if (url.indexOf('?') > 0 || url.indexOf('#') > 0) {
-		var regex = new RegExp('([?&#])(?:' + remove.join('|') + ')=[^&#]*', 'ig');
+		var regex = new RegExp('([?&#])(?:' + tokens.join('|') + ')=[^&#]*', 'ig');
 		var filtered = url;
 		filtered = filtered.replace(regex, '$1'); // Remove `name=value`
 		if ( filtered != url ) {

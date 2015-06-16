@@ -11,18 +11,28 @@
 		return;
 	}
 
+
+
+	// Local logic
+	var tokens;
 	function replaceQuery(url) {
-		var nUrl = stripQuery(url);
+		var nUrl = stripQuery(tokens, url);
 		if ( nUrl ) {
 			console.warn('Query Stripper did its thing on "' + url + '".');
 			history.replaceState({}, '', nUrl);
 		}
 	}
 
-	// Immediately
-	replaceQuery(location.href);
 
-	// When the URL changes (only via pushState & replaceState?)
+
+	// Get tokens from storage
+	getTokens(function(stored) {
+		tokens = stored;
+	});
+
+
+
+	// 'Listen' for URL changes (pushState, replaceState, hash)
 	var href = location.href;
 	function checkQuery() {
 		if ( location.href != href ) {
