@@ -1,7 +1,9 @@
 qs.ui = {
 	init: function() {
+		console.time('Options init');
 		qs.ui.loadTokens(function() {
 			qs.ui.attachListeners();
+			console.timeEnd('Options init');
 		});
 	},
 
