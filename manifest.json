@@ -10,6 +10,7 @@
 	},
 
 	"permissions": [
+		"storage",
 		"webRequest",
 		"webRequestBlocking",
 		"*://*/*"
@@ -17,11 +18,11 @@
 	"background": {
 		"scripts": [ "logic.js", "background.js" ]
 	},
-
 	"content_scripts": [{
 		"all_frames": true,
 		"run_at": "document_start",
 		"js": [ "logic.js", "content.js" ],
 		"matches": [ "http://*/*", "https://*/*" ]
-	}]
+	}],
+	"options_page": "options/options.html"
 }

@@ -1,0 +1,17 @@
+body {
+	font-family: sans-serif;
+	line-height: 1.4;
+}
+textarea {
+	width: 100%;
+	line-height: 1.2;
+	font-family: monospace;
+}
+
+#form-tokens .saved {
+	color: green;
+	font-weight: bold;
+}
+#form-tokens:not(.saved) .saved {
+	display: none;
+}

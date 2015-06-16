@@ -1,5 +1,5 @@
-function getTokens(callback) {
-	var tokens = [
+qs = {
+	defaultTokens: [
 		// Atlassian
 		'atl_medium',
 		'atl_camp',
@@ -24,19 +24,25 @@ function getTokens(callback) {
 		'xtor',
 		'xtref',
 		'xtrck',
-	];
-	setTimeout(callback, 1, tokens);
-}
+	],
 
-function stripQuery(tokens, url) {
-	if (url.indexOf('?') > 0 || url.indexOf('#') > 0) {
-		var regex = new RegExp('([?&#])(?:' + tokens.join('|') + ')=[^&#]*', 'ig');
-		var filtered = url;
-		filtered = filtered.replace(regex, '$1'); // Remove `name=value`
-		if ( filtered != url ) {
-			filtered = filtered.replace(/([?&#])[?&#]+/g, '$1'); // Replace double ?&# by first occurring
-			filtered = filtered.replace(/[?&#]+$/, ''); // Remove trailing ?&#
-			return filtered;
+	getTokens: function(callback) {
+		chrome.storage.local.get('tokens', function(items) {
+			var tokens = items.tokens && items.tokens.length ? items.tokens : qs.defaultTokens;
+			callback(tokens);
+		});
+	},
+
+	stripQuery: function(tokens, url) {
+		if (url.indexOf('?') > 0 || url.indexOf('#') > 0) {
+			var regex = new RegExp('([?&#])(?:' + tokens.join('|') + ')=[^&#]*', 'ig');
+			var filtered = url;
+			filtered = filtered.replace(regex, '$1'); // Remove `name=value`
+			if ( filtered != url ) {
+				filtered = filtered.replace(/([?&#])[?&#]+/g, '$1'); // Replace double ?&# by first occurring
+				filtered = filtered.replace(/[?&#]+$/, ''); // Remove trailing ?&#
+				return filtered;
+			}
 		}
 	}
-}
+};
