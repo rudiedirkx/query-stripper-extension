@@ -1,6 +1,6 @@
 {
 	"name": "Query stripper",
-	"version": "1.6",
+	"version": "1.7",
 	"manifest_version": 2,
 
 	"description": "Strips annoying query parameters from URLs. It does utm_* (google), atl_* (atlassian) and ref_ (imdb). More tokens are customizable.",
