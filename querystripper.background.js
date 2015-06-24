@@ -4,8 +4,10 @@ var tokens;
 function loadTokens() {
 	qs.getTokens(function(stored) {
 		tokens = stored;
+		console.log('Loaded tokens', tokens);
 	});
 }
+loadTokens();
 
 
 
