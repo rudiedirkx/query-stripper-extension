@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>query stripper test</title>
+</head>
+
+<body>
+
+<div id="links"></div>
+<hr>
+<div>
+	<p>
+		<button id="hist-push">History: push</button>
+		<button id="hist-replace">History: replace</button>
+	</p>
+</div>
+
+<script>
+console.log('loaded');
+</script>
+<script>
+document.querySelector('#links').innerHTML = ([
+	'?utm_source=foo',
+	'?utm_source=',
+	'?utm_source',
+	'?utm_source=foo&bar=keep&xtref=2',
+	'?utm_source=&bar=keep',
+	'?utm_source&bar=keep',
+	'?bar=keep&utm_source=foo',
+	'?bar=keep&	utm_source=',
+	'?bar=keep&utm_source',
+	'?utm_source=foo&utm_medium=bar&keep=1',
+	'?utm_source=foo#utm_medium=bar',
+	'#utm_source=foo',
+	'#utm_source=foo&utm_medium=bar&keep=1',
+	'?utm_source=foo&utm_medium=bar&keep=1#utm_source=foo&utm_medium=bar&keep=1',
+]).map((href, n) => {
+	return `<p><a href="index.html${href}">link ${n+1}</a></p>`;
+}).join('');
+</script>
+
+<script>
+function getUrl() {
+	const links = document.querySelectorAll('a');
+	return links[parseInt(Math.random() * links.length)].href;
+}
+
+document.querySelector('#hist-push').onclick = e => history.pushState({}, '', getUrl());
+// document.querySelector('#hist-push').oncontextmenu = e => history.pushState({}, '', 'pushed2.html');
+</script>
+</body>
+
+</html>

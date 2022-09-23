@@ -1,10 +1,9 @@
 qs.ui = {
-	init: function() {
+	async init() {
 		console.time('Options init');
-		qs.ui.tokensToEl(function() {
-			qs.ui.attachListeners();
-			console.timeEnd('Options init');
-		});
+		await qs.ui.tokensToEl();
+		qs.ui.attachListeners();
+		console.timeEnd('Options init');
 	},
 
 	fixRows: function() {
@@ -31,15 +30,11 @@ qs.ui = {
 		return qs.ui.strToTokens($taTokens.value);
 	},
 
-	tokensToEl: function(callback) {
-		var $taTokens = document.getElementById('ta-tokens');
-
-		qs.getTokens(function(tokens) {
-			$taTokens.value = $taTokens.defaultValue = tokens.join("\n");
-			qs.ui.fixRows.call($taTokens);
-
-			callback && callback();
-		});
+	async tokensToEl() {
+		const $taTokens = document.getElementById('ta-tokens');
+		const tokens = await qs.getTokens();
+		$taTokens.value = $taTokens.defaultValue = tokens.join("\n");
+		qs.ui.fixRows.call($taTokens);
 	},
 
 	attachListeners: function() {
@@ -60,26 +55,9 @@ qs.ui = {
 
 				// Update textarea with current tokens
 				qs.ui.tokensToEl();
-
-				// Trigger bg script reload
-				chrome.runtime.sendMessage({RELOAD: true}, function(response) {
-					console.timeEnd('Saved and reloaded');
-
-					setTimeout(function() {
-						$formTokens.classList.remove('saved');
-					}, 1000);
-				});
 			}
 
-			// Reset to defaults
-			console.time('Saved and reloaded');
-			if (!tokens.length) {
-				chrome.storage.local.remove('tokens', next);
-			}
-			// Save custom tokens
-			else {
-				chrome.storage.local.set({"tokens": tokens}, next);
-			}
+			qs.save(tokens).then(x => qs.loadRules()).then(rules => console.log(rules));
 		});
 
 		// Tokens textarea size

@@ -1,0 +1,30 @@
+[
+	{
+		"id": 101,
+		"priority": 2,
+		"action": {
+			"type": "redirect",
+			"redirect": {
+				"regexSubstitution": "\\1"
+			}
+		},
+		"condition": {
+			"regexFilter": "([?#&])[?#&]+",
+			"resourceTypes": ["main_frame", "sub_frame"]
+		}
+	},
+	{
+		"id": 102,
+		"priority": 1,
+		"action": {
+			"type": "redirect",
+			"redirect": {
+				"regexSubstitution": "\\1"
+			}
+		},
+		"condition": {
+			"regexFilter": "(.)[?#&]+$",
+			"resourceTypes": ["main_frame", "sub_frame"]
+		}
+	}
+]
