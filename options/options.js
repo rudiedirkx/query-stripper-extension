@@ -43,11 +43,9 @@ qs.ui = {
 		var $formTest = document.getElementById('form-test');
 		var $inpTestUrl = document.getElementById('inp-test-url');
 		var $msgTestResult = document.getElementById('msg-test-result');
+		var savedTimer;
 
-		// Save tokens
-		$formTokens.addEventListener('submit', function(e) {
-			e.preventDefault();
-
+		function saveTokens() {
 			var tokens = qs.ui.elToTokens($taTokens);
 
 			function next() {
@@ -57,7 +55,26 @@ qs.ui = {
 				qs.ui.tokensToEl();
 			}
 
-			qs.save(tokens).then(x => qs.loadRules()).then(rules => console.log(rules));
+			qs.save(tokens).then(x => qs.loadRules()).then(rules => console.log('rules', rules));
+
+			// Notify user
+			$formTokens.classList.add('saved');
+			clearTimeout(savedTimer);
+			savedTimer = setTimeout(function() {
+				$formTokens.classList.remove('saved');
+			}, 1500);
+		}
+
+		// Save tokens
+		$formTokens.addEventListener('submit', function(e) {
+			e.preventDefault();
+			saveTokens();
+		});
+		$formTokens.addEventListener('keydown', function(e) {
+			if (e.ctrlKey && !e.shiftKey && !e.altKey && e.code === 'KeyS') {
+				e.preventDefault();
+				saveTokens();
+			}
 		});
 
 		// Tokens textarea size
